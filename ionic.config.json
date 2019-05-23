@@ -1,6 +1,8 @@
 {
   "name": "ecotrack-i",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "30447a18"
 }
