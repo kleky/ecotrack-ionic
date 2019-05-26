@@ -1,14 +1,19 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>
+            EcoTrack Fuel Tracker
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+    <div class="ion-padding">
+        <p>
+            <button (click)="reset()">delete file</button><br />
+            <button (click)="output()">display</button><br />
+        </p>
+        <ul>
+            <li *ngFor="let msg of message">{{msg}}</li>
+        </ul>
+    </div>
 </ion-content>

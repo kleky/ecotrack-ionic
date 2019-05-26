@@ -55,12 +55,12 @@
       "as-needed"
     ],
     "object-literal-sort-keys": false,
-    "ordered-imports": false,
+    "ordered-imports": true,
     "quotemark": [
       true,
-      "single"
+      "double"
     ],
-    "trailing-comma": false,
+    "trailing-comma": true,
     "no-output-on-prefix": true,
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
