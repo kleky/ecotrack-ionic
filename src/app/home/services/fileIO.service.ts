@@ -1,23 +1,20 @@
-import {Injectable, OnInit} from "@angular/core";
+import {Inject, Injectable, OnInit} from "@angular/core";
 import {File} from "@ionic-native/file/ngx";
 import {Platform} from "@ionic/angular";
-import {IDataStore} from "../data-stores/IDataStore";
+import {IDataStoreOptions} from "../data-stores/IDataStoreOptions";
 import {IStore} from "../data-stores/IStore";
+import {IVersionedData} from "../data-stores/IVersionedData";
 
-@Injectable({ providedIn: "root"})
-export class FileStore<TData extends IDataStore<TData>> implements OnInit, IStore {
+@Injectable({providedIn: "root"})
+export class FileStore<TData extends IVersionedData> implements IStore {
+
+    public Options: IDataStoreOptions<TData>;
     public data: TData;
     private dataDirFolder = "ecotrack";
     public dataDir: { exists: boolean; nativeUrl: string };
 
     constructor(private file: File,
-                private platform: Platform) {}
-
-    ngOnInit(): void {
-        this.data.Options.path = this.data.Options.type + ".json";
-        console.log("Store output path: " + this.data.Options.path);
-        this.loadDataFile();
-    }
+                private platform: Platform ) {}
 
     get(key: string) {
         return this.data[key];
@@ -25,10 +22,15 @@ export class FileStore<TData extends IDataStore<TData>> implements OnInit, IStor
 
     async set(key: string, val: any) {
         this.data[key] = val;
-        await this.writeFileText(this.dataDirFolder, this.data.Options.path, JSON.stringify(this.data));
+        await this.writeFileText(this.dataDirFolder, this.Options.path, JSON.stringify(this.data));
     }
 
-    private loadDataFile() {
+    public loadOptions(opts: IDataStoreOptions<TData> ) {
+        this.Options = opts;
+        this.Options.path = this.Options.type + ".json";
+    }
+
+    public loadDataFile() {
         this.platform.ready().then(async () => {
             if (this.platform.is("cordova")) {
 
@@ -37,19 +39,19 @@ export class FileStore<TData extends IDataStore<TData>> implements OnInit, IStor
                     if (!this.dataDir.exists) {
                         await this.createFolder(this.file.dataDirectory, this.dataDirFolder);
                     }
-                    if (!await this.fileExists(this.dataDir.nativeUrl, this.data.Options.path)) {
-                        await this.createFile(this.dataDir.nativeUrl, this.data.Options.path);
+                    if (!await this.fileExists(this.dataDir.nativeUrl, this.Options.path)) {
+                        await this.createFile(this.dataDir.nativeUrl, this.Options.path);
                     }
-                    let data = JSON.parse(await this.readFileText(this.file.dataDirectory, this.data.Options.path)) as TData;
-                    if (data.Version < this.data.Options.defaults.Version) {
-                        console.log("Old version [" + data.Version + "] of [" + this.data.Options.type + "]. " +
+                    let data = JSON.parse(await this.readFileText(this.file.dataDirectory, this.Options.path)) as TData;
+                    if (data.Version < this.Options.defaults.Version) {
+                        console.log("Old version [" + data.Version + "] of [" + this.Options.type + "]. " +
                             "New version is [" + this.data.Version + []);
                         // todo - map across old data https://github.com/loedeman/AutoMapper
-                        data = this.data.Options.defaults;
+                        data = this.Options.defaults;
                     }
                     this.data = data;
                 } catch (error) {
-                    this.data = this.data.Options.defaults;
+                    this.data = this.Options.defaults;
                 }
             } else {
                 // fallback to browser APIs

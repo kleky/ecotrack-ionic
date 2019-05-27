@@ -1,14 +1,13 @@
+import {Injectable} from "@angular/core";
 import {FuelLog} from "../../models/FuelLog";
-import {IDataStore} from "../IDataStore";
-import {UserDataStoreOpts} from "./UserDataStoreOpts";
+import {IVersionedData} from "../IVersionedData";
 
-export class UserDataStore implements IDataStore<UserDataStore> {
+@Injectable({providedIn: "root"})
+export class UserDataStore implements IVersionedData {
   public Version = 0.3;
   public fuelLog: FuelLog;
-  public Options: UserDataStoreOpts;
 
   constructor() {
     this.fuelLog = new FuelLog();
-    this.Options = new UserDataStoreOpts();
   }
 }

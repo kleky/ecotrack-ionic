@@ -1,34 +1,32 @@
-import {strategy} from "@angular-devkit/core/src/experimental/jobs";
-import {isDefined} from "@angular/compiler/src/util";
-import {Component} from "@angular/core";
-import {File} from "@ionic-native/file/ngx";
-import {Platform} from "@ionic/angular";
-import {__await} from "tslib";
+import {Component, OnInit} from "@angular/core";
 import {UserDataStore} from "./data-stores/user-data/UserDataStore";
-import {FileStore} from "./services/fileIO.service";
 import {UserDataStoreOpts} from "./data-stores/user-data/UserDataStoreOpts";
+import {FileStore} from "./services/fileIO.service";
 
 @Component({
     selector: "app-home",
     templateUrl: "home.page.html",
     styleUrls: ["home.page.scss"],
 })
-export class HomePage {
+export class HomePage implements OnInit{
 
     public message: string[] = [];
 
+    constructor(private file: FileStore<UserDataStore>) {}
 
-
-    constructor(private file: FileStore<UserDataStore>) {
-        this.log("file: " , file.data);
+    ngOnInit(): void {
+        this.file.loadOptions(new UserDataStoreOpts());
+        this.file.loadDataFile();
+        this.log("file: " , this.file.Options);
     }
 
     async reset() {
-        await this.file.deleteFile(this.file.dataDir.nativeUrl, this.file.data.Options.path);
+        await this.file.deleteFile(this.file.dataDir.nativeUrl, this.file.Options.path);
     }
 
     async output() {
-        this.log("" + this.file.dataDir.exists);
+        this.log("file: " + await this.file.readFileText(this.file.dataDir.nativeUrl, this.file.Options.path));
+        this.log("data: ", this.file.data);
     }
 
     log(msg: string, obj: any = null) {
