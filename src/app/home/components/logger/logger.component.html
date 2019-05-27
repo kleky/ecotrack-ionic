@@ -1,0 +1,43 @@
+
+  <ion-row>
+    <div *ngIf="fuelEconomy > 0" class="economy-widget">
+      <label>Economy</label>
+      <span class="economy-value">{{ fuelEconomy | number: '1.1-1' }} mpg</span>
+    </div>
+  </ion-row>
+  <ion-row>
+    <hr />
+  </ion-row>
+  <ion-row>
+    <ion-col size="4">
+      <span>{{ 'UOM.MILEAGE'  }}</span>
+      <div><ion-input [(ngModel)]="newFuelStop.mileage" type="number" placeholder="Current mileage"></ion-input></div>
+    </ion-col>
+
+    <ion-col size="4">
+      <ion-icon icon="fa-gas-pump"></ion-icon>
+      <span style="padding: 0 0 0 0.2em;">{{ 'UOM.LITRES'  }}</span>
+      <div><ion-input [(ngModel)]="newFuelStop.fuel" type="number" placeholder="Litre added"></ion-input></div>
+    </ion-col>
+    <ion-col size="2">
+      <ion-button class="button full-width" (click)="addStop()">{{ 'ACTIONS.ADD'  }}</ion-button>
+    </ion-col>
+  </ion-row>
+
+
+<ion-list-header>{{ 'PAGES.LOGGER.FUEL_STOPS'  }}</ion-list-header>
+<ion-list>
+  <ion-item *ngFor="let fuelStop of fuelLog.fuelStops">
+    <div class="center">
+      <span class="mileage-list">{{ fuelStop.mileage | number }}</span>
+      <ion-icon icon="fa-gas-pump"></ion-icon>
+      <span class="fuel-list">{{fuelStop.fuel | number }}</span>
+    </div>
+    <div class="right">
+      <ion-button fill="outline" class="button" (click)="removeStop(fuelStop)">{{ 'ACTIONS.REMOVE' }}</ion-button>
+    </div>
+  </ion-item>
+</ion-list>
+
+
+

@@ -68,6 +68,7 @@ export class FileStore<TData extends IVersionedData> implements IStore {
             } else {
                 // fallback to browser APIs
                 this.logger.log("Not Cordova platform");
+                this.data = this.Options.defaults;
             }
         });
 
