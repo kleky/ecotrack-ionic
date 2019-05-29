@@ -27,7 +27,7 @@
 
 <ion-list-header>{{ 'PAGES.LOGGER.FUEL_STOPS'  }}</ion-list-header>
 <ion-list>
-  <ion-item *ngFor="let fuelStop of fuelLog.fuelStops">
+  <ion-item *ngFor="let fuelStop of FuelLog.fuelStops">
     <div class="center">
       <span class="mileage-list">{{ fuelStop.mileage | number }}</span>
       <ion-icon icon="fa-gas-pump"></ion-icon>

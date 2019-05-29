@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {File} from "@ionic-native/file/ngx";
 import {Platform} from "@ionic/angular";
+import {BehaviorSubject, Observable} from "rxjs";
 import {IDataStoreOptions} from "../data-stores/IDataStoreOptions";
 import {IStore} from "../data-stores/IStore";
 import {IVersionedData} from "../data-stores/IVersionedData";
@@ -10,7 +11,7 @@ import {LogService} from "./log.service";
 export class FileStore<TData extends IVersionedData> implements IStore {
 
     public Options: IDataStoreOptions<TData>;
-    public data: TData;
+    public data: BehaviorSubject<TData>;
     private dataDirFolder = "ecotrack";
     public dataDir: { exists: boolean; nativeUrl: string };
 
@@ -35,43 +36,46 @@ export class FileStore<TData extends IVersionedData> implements IStore {
         return true;
     }
 
-    public loadDataFile() {
-        this.logger.log("2. Load data.");
-        this.platform.ready().then(async () => {
-            if (this.platform.is("cordova")) {
-                this.logger.log("3. Cordova platform");
-                try {
-                    this.dataDir = await this.directoryExists(this.file.dataDirectory + this.dataDirFolder);
-                    this.logger.log("4. Data dir: ", this.dataDir);
-                    if (!this.dataDir.exists) {
-                        await this.createFolder(this.file.dataDirectory, this.dataDirFolder);
-                    }
-                    if (!await this.fileExists(this.dataDir.nativeUrl, this.Options.path)) {
-                        await this.createFile(this.dataDir.nativeUrl, this.Options.path);
-                    }
-                    const fileContent: string = await this.readFileText(this.dataDir.nativeUrl, this.Options.path);
-                    this.data = fileContent
-                        ? JSON.parse(fileContent) as TData
-                        : this.Options.defaults;
+    public loadDataFile(): Observable<TData> {
 
-                    if (this.data.Version < this.Options.defaults.Version) {
-                        this.logger.log("Old version [" + this.data.Version + "] of [" + this.Options.type + "]. " +
-                            "New version is [" + this.data.Version + []);
-                        // todo - map across old data as this will wipe everything - https://github.com/loedeman/AutoMapper
-                        this.data = this.Options.defaults;
+        return new Observable(observer => {
+            this.logger.log("2. Load data.");
+            this.platform.ready().then(async () => {
+                if (this.platform.is("cordova")) {
+                    this.logger.log("3. Cordova platform");
+                    try {
+                        this.dataDir = await this.directoryExists(this.file.dataDirectory + this.dataDirFolder);
+                        this.logger.log("4. Data dir: ", this.dataDir);
+                        if (!this.dataDir.exists) {
+                            await this.createFolder(this.file.dataDirectory, this.dataDirFolder);
+                        }
+                        if (!await this.fileExists(this.dataDir.nativeUrl, this.Options.path)) {
+                            await this.createFile(this.dataDir.nativeUrl, this.Options.path);
+                        }
+                        const fileContent: string = await this.readFileText(this.dataDir.nativeUrl, this.Options.path);
+                        let data = fileContent
+                            ? JSON.parse(fileContent) as TData
+                            : this.Options.defaults;
+
+                        if (data.Version < this.Options.defaults.Version) {
+                            this.logger.log("Old version [" + data.Version + "] of [" + this.Options.type + "]. " +
+                                "New version is [" + data.Version + []);
+                            // todo - map across old data as this will wipe everything - https://github.com/loedeman/AutoMapper
+                            data = this.Options.defaults;
+                        }
+                        this.logger.log("File load complete. Data in memory: ", data);
+                        observer.next(data);
+                    } catch (error) {
+                        this.logger.log("Error encountered trying to load file: ", error);
+                        observer.error("Error encountered trying to load file");
                     }
-                    this.logger.log("File load complete. Data in memory: ", this.data);
-                } catch (error) {
-                    this.logger.log("Error encountered trying to load file: ", error);
-                    this.data = this.Options.defaults;
+                } else {
+                    // fallback to browser APIs
+                    this.logger.log("Not Cordova platform");
+                    observer.error("Not cordova platform");
                 }
-            } else {
-                // fallback to browser APIs
-                this.logger.log("Not Cordova platform");
-                this.data = this.Options.defaults;
-            }
+            });
         });
-
     }
 
     public async createFolder(root: string, folder: string, replace: boolean = false) {
