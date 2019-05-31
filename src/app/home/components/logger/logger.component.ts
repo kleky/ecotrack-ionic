@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from "@angular/core";
+import {BehaviorSubject} from "rxjs";
 import {UserDataStore} from "../../data-stores/user-data/UserDataStore";
 import {FuelLog} from "../../models/FuelLog";
 import {FuelStop} from "../../models/FuelStop";
@@ -12,7 +13,7 @@ import {LogService} from "../../services/log.service";
 })
 export class LoggerComponent implements OnInit {
 
-    @Input() FuelLog: FuelLog;
+    @Input() FuelLog: BehaviorSubject<FuelLog>;
     public newFuelStop: FuelStop;
     public fuelEconomy: number;
 
@@ -20,10 +21,10 @@ export class LoggerComponent implements OnInit {
                 private logger: LogService) {}
 
     ngOnInit() {
-        this.logger.log("LOgger init");
+        this.logger.log("[LOGGER] init");
         // this.newStop();
         // this.renderEconomy();
-        this.logger.log("Logger: ", this.FuelLog);
+        this.logger.log("[LOGGER] FuelLog: ", this.FuelLog.getValue());
     }
 
     alert() {
@@ -31,9 +32,9 @@ export class LoggerComponent implements OnInit {
     }
 
     renderEconomy() {
-        if (this.FuelLog.fuelStops.length > 1) {
-            this.fuelEconomy = this.calculatedEconomy(this.FuelLog.fuelStops);
-            console.log("Economy calculated as " + this.fuelEconomy);
+        if (this.FuelLog.getValue().fuelStops.length > 1) {
+            this.fuelEconomy = this.calculatedEconomy(this.FuelLog.getValue().fuelStops);
+            this.logger.log("[LOGGER] Economy calculated as " + this.fuelEconomy);
         } else {
             this.fuelEconomy = null;
         }
@@ -56,23 +57,27 @@ export class LoggerComponent implements OnInit {
     }
 
     addStop() {
-        this.FuelLog.AddFuelStop(this.newFuelStop);
-        this.store.set("FuelLog", this.FuelLog);
+        const entry = this.FuelLog.getValue();
+        entry.AddFuelStop(this.newFuelStop);
+        this.FuelLog.next(entry);
+        // this.store.set("FuelLog", this.FuelLog);
         this.newStop();
     }
 
     newStop() {
-        if (this.FuelLog.GetLastFuelStop() == null) {
+        if (this.FuelLog.getValue().GetLastFuelStop() == null) {
             this.newFuelStop = new FuelStop();
         } else {
-            this.newFuelStop = new FuelStop(this.FuelLog.GetLastFuelStop());
+            this.newFuelStop = new FuelStop(this.FuelLog.getValue().GetLastFuelStop());
         }
         this.renderEconomy();
     }
 
     removeStop(fuelStop: FuelStop) {
-        this.FuelLog.RemoveFuelStop(fuelStop);
-        this.store.set("FuelLog", this.FuelLog);
+        const entry = this.FuelLog.getValue();
+        entry.RemoveFuelStop(fuelStop);
+        this.FuelLog.next(entry);
+        // this.store.set("FuelLog", this.FuelLog);
         this.renderEconomy();
     }
 }
