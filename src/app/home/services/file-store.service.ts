@@ -41,8 +41,8 @@ export class FileStore<TData extends IVersionedData> implements IStore {
                 if (this.platform.is("cordova")) {
                     this.logger.log("[STORAGE] 2. Cordova platform");
                     try {
-                        this.logger.log("[STORAGE] 3. Load " + this.Options.type);
                         const fileContent: string = await this.storage.get(this.Options.type);
+                        this.logger.log("[STORAGE] 3. Load " + this.Options.type, fileContent);
                         let data = fileContent
                             ? JSON.parse(fileContent) as TData
                             : this.Options.defaults;

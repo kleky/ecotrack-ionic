@@ -26,9 +26,9 @@
   <ion-list-header>
     <ion-label>Fuel Stops</ion-label>
   </ion-list-header>
-  <ion-list>
-    <ion-item *ngFor="let fuelStop of FuelLog.fuelStops">
-        <span class="mileage-list">{{ fuelStop.mileage | number }}</span>
+  <ion-list *ngIf="(FuelLog | async) as fuelLog">
+    <ion-item *ngFor="let fuelStop of fuelLog.fuelStops">
+        <span class="mileage-list">{{ fuelStop | number }}</span>
         <ion-icon name="color-fill"></ion-icon>
         <span class="fuel-list">{{fuelStop.fuel | number }}</span>
         <ion-button fill="outline" class="button" (click)="removeStop(fuelStop)">Remove</ion-button>

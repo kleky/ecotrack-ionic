@@ -21,12 +21,9 @@ export class LoggerComponent implements OnInit {
                 private logger: LogService) {}
 
     ngOnInit() {
-        this.logger.log("[LOGGER] init");
-        // this.newStop();
-        // this.renderEconomy();
-        this.logger.log("[LOGGER] FuelLog: ", this.FuelLog.getValue());
+        this.newStop();
+        this.renderEconomy();
     }
-
     alert() {
 
     }
