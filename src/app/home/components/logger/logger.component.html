@@ -1,43 +1,40 @@
 
-  <ion-row>
-    <div *ngIf="fuelEconomy > 0" class="economy-widget">
+  <ion-row class="center" *ngIf="fuelEconomy > 0">
       <label>Economy</label>
       <span class="economy-value">{{ fuelEconomy | number: '1.1-1' }} mpg</span>
-    </div>
   </ion-row>
   <ion-row>
-    <hr />
+      <ion-item>
+        <ion-label>Mileage</ion-label>
+        <ion-input [(ngModel)]="newFuelStop.mileage" type="number" placeholder="current mileage"></ion-input>
+      </ion-item>
   </ion-row>
   <ion-row>
-    <ion-col size="4">
-      <span>{{ 'UOM.MILEAGE'  }}</span>
-      <div><ion-input [(ngModel)]="newFuelStop.mileage" type="number" placeholder="Current mileage"></ion-input></div>
-    </ion-col>
-
-    <ion-col size="4">
-      <ion-icon icon="fa-gas-pump"></ion-icon>
-      <span style="padding: 0 0 0 0.2em;">{{ 'UOM.LITRES'  }}</span>
-      <div><ion-input [(ngModel)]="newFuelStop.fuel" type="number" placeholder="Litre added"></ion-input></div>
-    </ion-col>
-    <ion-col size="2">
-      <ion-button class="button full-width" (click)="addStop()">{{ 'ACTIONS.ADD'  }}</ion-button>
+    <ion-col size="10">
+      <ion-item>
+        <ion-icon name="color-fill"></ion-icon>
+        <ion-label>Fuel</ion-label>
+        <ion-input [(ngModel)]="newFuelStop.fuel" type="number" placeholder="litres added"></ion-input>
+      </ion-item>
     </ion-col>
   </ion-row>
+  <ion-row>
+    <ion-button class="button full-width" (click)="addStop()">Add</ion-button>
+  </ion-row>
 
+<ion-row>
+  <ion-list-header>
+    <ion-label>Fuel Stops</ion-label>
+  </ion-list-header>
+  <ion-list>
+    <ion-item *ngFor="let fuelStop of FuelLog.fuelStops">
+        <span class="mileage-list">{{ fuelStop.mileage | number }}</span>
+        <ion-icon name="color-fill"></ion-icon>
+        <span class="fuel-list">{{fuelStop.fuel | number }}</span>
+        <ion-button fill="outline" class="button" (click)="removeStop(fuelStop)">Remove</ion-button>
+    </ion-item>
+  </ion-list>
 
-<ion-list-header>{{ 'PAGES.LOGGER.FUEL_STOPS'  }}</ion-list-header>
-<ion-list>
-  <ion-item *ngFor="let fuelStop of FuelLog.fuelStops">
-    <div class="center">
-      <span class="mileage-list">{{ fuelStop.mileage | number }}</span>
-      <ion-icon icon="fa-gas-pump"></ion-icon>
-      <span class="fuel-list">{{fuelStop.fuel | number }}</span>
-    </div>
-    <div class="right">
-      <ion-button fill="outline" class="button" (click)="removeStop(fuelStop)">{{ 'ACTIONS.REMOVE' }}</ion-button>
-    </div>
-  </ion-item>
-</ion-list>
-
+</ion-row>
 
 

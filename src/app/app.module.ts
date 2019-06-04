@@ -7,6 +7,7 @@ import {StatusBar} from "@ionic-native/status-bar/ngx";
 import {IonicModule, IonicRouteStrategy, Platform} from "@ionic/angular";
 
 import {File} from "@ionic-native/file/ngx";
+import {IonicStorageModule} from "@ionic/storage";
 import {AppRoutingModule} from "./app-routing.module";
 import {AppComponent} from "./app.component";
 
@@ -16,6 +17,7 @@ import {AppComponent} from "./app.component";
     imports: [
         BrowserModule,
         IonicModule.forRoot(),
+        IonicStorageModule.forRoot(),
         AppRoutingModule,
     ],
     providers: [

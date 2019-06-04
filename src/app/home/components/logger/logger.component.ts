@@ -3,7 +3,7 @@ import {BehaviorSubject} from "rxjs";
 import {UserDataStore} from "../../data-stores/user-data/UserDataStore";
 import {FuelLog} from "../../models/FuelLog";
 import {FuelStop} from "../../models/FuelStop";
-import {FileStore} from "../../services/fileIO.service";
+import {FileStore} from "../../services/file-store.service";
 import {LogService} from "../../services/log.service";
 
 @Component({
