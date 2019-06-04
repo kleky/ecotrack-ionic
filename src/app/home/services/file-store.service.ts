@@ -30,8 +30,7 @@ export class FileStore<TData extends IVersionedData> implements IStore {
 
     async loadOptions(opts: IDataStoreOptions<TData>): Promise<boolean> {
         this.Options = opts;
-        this.Options.path = this.Options.type + ".json";
-        this.logger.log("[STORAGE] 1. Options loaded for " + this.Options.path);
+        this.logger.log("[STORAGE] 1. Options loaded for " + this.Options.type);
         return true;
     }
 
@@ -71,6 +70,7 @@ export class FileStore<TData extends IVersionedData> implements IStore {
     }
 
     deleteStorage(type: string) {
+        this.logger.log("Removing " + type);
         this.storage.remove(type);
     }
 }

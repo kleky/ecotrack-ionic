@@ -16,8 +16,7 @@ export class HomePage implements OnInit {
     public FuelLog: BehaviorSubject<FuelLog> = new BehaviorSubject(new FuelLog());
 
     constructor(private store: FileStore<UserDataStore>,
-                private logger: LogService) {
-    }
+                private logger: LogService) {}
 
     ngOnInit(): void {
         this.store.loadOptions(new UserDataStoreOpts()).then(e => {

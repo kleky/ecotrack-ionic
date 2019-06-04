@@ -5,7 +5,6 @@ import {UserDataStore} from "./UserDataStore";
 @Injectable({providedIn: "root"})
 export class UserDataStoreOpts implements IDataStoreOptions<UserDataStore> {
   type = "UserDataStore";
-  path: string;
   defaults: UserDataStore;
 
   constructor() {
