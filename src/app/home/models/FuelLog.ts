@@ -1,4 +1,4 @@
-import {FuelStop} from './FuelStop';
+import {FuelStop} from "./FuelStop";
 
 export class FuelLog {
 

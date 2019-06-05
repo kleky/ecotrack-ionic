@@ -23,9 +23,9 @@ export class FileStore<TData extends IVersionedData> implements IStore {
     }
 
     async set(key: string, val: any) {
-        this.logger.log("Set data", this.data);
+        this.logger.log(`Set data ${key}:`, this.data);
         this.data[key] = val;
-        return this.storage.set(this.Options.type, this.data);
+        return this.storage.set(this.Options.type, JSON.stringify(this.data));
     }
 
     async loadOptions(opts: IDataStoreOptions<TData>): Promise<boolean> {
@@ -43,9 +43,9 @@ export class FileStore<TData extends IVersionedData> implements IStore {
                     try {
                         const fileContent: string = await this.storage.get(this.Options.type);
                         this.logger.log("[STORAGE] 3. Load " + this.Options.type, fileContent);
-                        let data = fileContent
-                            ? JSON.parse(fileContent) as TData
-                            : this.Options.defaults;
+                        let data: TData = (fileContent
+                            ? JSON.parse(fileContent)
+                            : this.Options.defaults) as TData;
 
                         if (data.Version < this.Options.defaults.Version) {
                             this.logger.log("[STORAGE] Old version [" + data.Version + "] of [" + this.Options.type + "]. " +
@@ -69,8 +69,8 @@ export class FileStore<TData extends IVersionedData> implements IStore {
         });
     }
 
-    deleteStorage(type: string) {
-        this.logger.log("Removing " + type);
-        this.storage.remove(type);
+    async deleteStorage(type: string) {
+        await this.storage.remove(type);
+        this.logger.log("Removed " + type);
     }
 }

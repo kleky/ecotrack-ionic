@@ -21,11 +21,10 @@ export class LoggerComponent implements OnInit {
                 private logger: LogService) {}
 
     ngOnInit() {
-        this.newStop();
-        this.renderEconomy();
-    }
-    alert() {
-
+        this.FuelLog.subscribe(() => {
+            this.loadNewStop();
+            this.renderEconomy();
+        });
     }
 
     renderEconomy() {
@@ -41,40 +40,34 @@ export class LoggerComponent implements OnInit {
      * @param fuelStops Ordered list with most recent fuel stop at index 0
      */
     calculatedEconomy(fuelStops: FuelStop[]) {
-
-        fuelStops.forEach((stop) => console.log(stop.fuel + " milieage: " + stop.mileage));
-
         const totalDistance = fuelStops[0].mileage - fuelStops[fuelStops.length - 1].mileage;
         const totalFuel = fuelStops
                 .reduce((sum, curr) => sum + Number(curr.fuel), 0)
             - Number(fuelStops[fuelStops.length - 1].fuel); // take away first entry of fuel
         const gallons = totalFuel * 0.22; // litres -> gallons
         return totalDistance / gallons;
-
     }
 
-    addStop() {
+    saveStop() {
         const entry = this.FuelLog.getValue();
         entry.AddFuelStop(this.newFuelStop);
         this.FuelLog.next(entry);
         // this.store.set("FuelLog", this.FuelLog);
-        this.newStop();
+        this.loadNewStop();
     }
 
-    newStop() {
-        if (this.FuelLog.getValue().GetLastFuelStop() == null) {
-            this.newFuelStop = new FuelStop();
-        } else {
+    loadNewStop() {
+        if (this.FuelLog.getValue().GetLastFuelStop()) {
             this.newFuelStop = new FuelStop(this.FuelLog.getValue().GetLastFuelStop());
+        } else {
+            this.newFuelStop = new FuelStop();
         }
-        this.renderEconomy();
+        this.logger.log(`[LOGGER] Load new stop`, this.newFuelStop);
     }
 
     removeStop(fuelStop: FuelStop) {
         const entry = this.FuelLog.getValue();
         entry.RemoveFuelStop(fuelStop);
         this.FuelLog.next(entry);
-        // this.store.set("FuelLog", this.FuelLog);
-        this.renderEconomy();
     }
 }

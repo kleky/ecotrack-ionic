@@ -11,14 +11,14 @@
         <div class="ion-padding">
             <app-logger [FuelLog]="FuelLog"></app-logger>
             <ion-row>
-                <button (click)="reset()">delete file</button>
+                <ion-button (click)="reset()">delete file</ion-button>
                 <br/>
-                <button (click)="output()">display</button>
+                <ion-button (click)="output()">display</ion-button>
                 <br/>
             </ion-row>
             <ion-row>
                 <ul #logs>
-                    <li *ngFor="let msg of (logger.Messages | async)">{{msg}}</li>
+                    <li *ngFor="let msg of (logger.Messages | async)" class="logger-li">{{msg}}</li>
                 </ul>
             </ion-row>
         </div>

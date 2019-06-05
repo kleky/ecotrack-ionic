@@ -16,7 +16,8 @@ export class HomePage implements OnInit {
     public FuelLog: BehaviorSubject<FuelLog> = new BehaviorSubject(new FuelLog());
 
     constructor(private store: FileStore<UserDataStore>,
-                private logger: LogService) {}
+                private logger: LogService) {
+    }
 
     ngOnInit(): void {
         this.store.loadOptions(new UserDataStoreOpts()).then(e => {
@@ -25,7 +26,7 @@ export class HomePage implements OnInit {
                 this.FuelLog.next(new FuelLog(userData.fuelLog));
                 this.FuelLog.asObservable().subscribe(log => {
                     this.logger.log("[HOME PAGE] Fuel Log change");
-                    this.store.set("FuelLog", log).then(() => {
+                    this.store.set("fuelLog", log).then(() => {
                         this.logger.log("[HOME PAGE] Fuel log saved");
                     }).catch(() => {
                         this.logger.log("[HOME PAGE] Error saving fuel log");
