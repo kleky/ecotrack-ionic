@@ -15,7 +15,7 @@ export class FuelLog {
     return this.fuelStops[0];
   }
 
-  public RemoveFuelStop(fuelStop: FuelStop){
+  public RemoveFuelStop(fuelStop: FuelStop) {
     this.fuelStops.splice(
       this.fuelStops.indexOf(fuelStop), 1);
   }
