@@ -8,3 +8,4 @@ export class FuelStop {
   fuel: number;
   dateAddedUtc: number;
 }
+
