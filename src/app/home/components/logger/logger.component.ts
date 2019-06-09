@@ -27,6 +27,10 @@ export class LoggerComponent implements OnInit {
         });
     }
 
+    newStopIsValid(): boolean {
+        return this.newFuelStop.fuel > 0;
+    }
+
     renderEconomy() {
         if (this.FuelLog.getValue().fuelStops.length > 1) {
             this.fuelEconomy = this.calculatedEconomy(this.FuelLog.getValue().fuelStops);

@@ -8,6 +8,7 @@
         <ion-icon name="car"></ion-icon>
         <ion-label>Mileage</ion-label>
         <ion-input [(ngModel)]="newFuelStop.mileage"
+                   class="mileage-input"
                    type="number"
                    placeholder="current mileage"></ion-input>
     </ion-item>
@@ -18,13 +19,14 @@
             <ion-icon name="color-fill"></ion-icon>
             <ion-label>Fuel</ion-label>
             <ion-input [(ngModel)]="newFuelStop.fuel"
+                       class="fuel-input"
                        type="number"
                        placeholder="litres added"></ion-input>
         </ion-item>
     </ion-col>
 </ion-row>
 <ion-row>
-    <ion-button class="button full-width" (click)="saveStop()">Add</ion-button>
+    <ion-button [disabled]="!newStopIsValid()" class="button full-width" (click)="saveStop()">Add</ion-button>
 </ion-row>
 
 <ion-row>

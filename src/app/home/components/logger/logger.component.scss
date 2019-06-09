@@ -1,5 +1,12 @@
 $stop-add-fontsize: 1.3em;
 
+.mileage-input {
+  font-size: $stop-add-fontsize;
+}
+.fuel-input {
+  font-size: $stop-add-fontsize;
+}
+
 .mileage-list {
   padding: 0 1em 0 0;
   font-size: $stop-add-fontsize;
