@@ -34,15 +34,20 @@
         <ion-label>Fuel Stops</ion-label>
     </ion-list-header>
     <ion-list *ngIf="(FuelLog | async) as fuelLog">
-        <ion-item *ngFor="let fuelStop of fuelLog.fuelStops">
-            <ion-icon name="car"></ion-icon>
-            <span class="mileage-list">{{ fuelStop.mileage | number }}</span>
-            <ion-icon name="color-fill"></ion-icon>
-            <span class="fuel-list">{{fuelStop.fuel | number }}</span>
-            <ion-button fill="outline" (click)="removeStop(fuelStop)">Remove</ion-button>
-        </ion-item>
+        <ng-container *ngIf="fuelLog.fuelStops.length > 0; else noData">
+            <ion-item *ngFor="let fuelStop of fuelLog.fuelStops">
+                <ion-icon name="car"></ion-icon>
+                <span class="mileage-list">{{ fuelStop.mileage | number }}</span>
+                <ion-icon name="color-fill"></ion-icon>
+                <span class="fuel-list">{{fuelStop.fuel | number }}</span>
+                <ion-button fill="outline" (click)="removeStop(fuelStop)">Remove</ion-button>
+            </ion-item>
+        </ng-container>
     </ion-list>
-
 </ion-row>
+
+<ng-template #noData>
+    <ion-badge color="medium">nothing logged</ion-badge>
+</ng-template>
 
 
