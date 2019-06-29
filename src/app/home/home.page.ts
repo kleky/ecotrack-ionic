@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ToastController} from "@ionic/angular";
 import {BehaviorSubject} from "rxjs";
 import {UserDataStore} from "./data-stores/user-data/UserDataStore";
@@ -12,7 +12,7 @@ import {LogService} from "./services/log.service";
     templateUrl: "home.page.html",
     styleUrls: ["home.page.scss"],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
 
     public FuelLog: BehaviorSubject<FuelLog> = new BehaviorSubject(new FuelLog());
 
@@ -59,6 +59,9 @@ export class HomePage implements OnInit {
     async output() {
         // this.logger.log("[HOME PAGE] store: " + await this.store.readFileText(this.store.dataDir.nativeUrl, this.store.Options.path));
         this.logger.log("[HOME PAGE] data: ", this.FuelLog.getValue());
+    }
+
+    ngOnDestroy(): void {
     }
 
 

@@ -9,6 +9,7 @@ import {IonicModule, Platform, ToastController} from "@ionic/angular";
 import {LoggerComponent} from "./components/logger/logger.component";
 
 import { HomePage } from "./home.page";
+import { DateLoggedPipe } from './date-logged.pipe';
 
 @NgModule({
   imports: [
@@ -22,7 +23,7 @@ import { HomePage } from "./home.page";
       }
     ])
   ],
-  declarations: [HomePage, LoggerComponent],
+  declarations: [HomePage, LoggerComponent, DateLoggedPipe],
   providers: [File, Platform, ToastController],
 })
 export class HomePageModule {}
