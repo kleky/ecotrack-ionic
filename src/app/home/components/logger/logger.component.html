@@ -36,7 +36,7 @@
     <ion-list *ngIf="(FuelLog | async) as fuelLog">
         <ng-container *ngIf="fuelLog.fuelStops.length > 0; else noData">
             <ion-item *ngFor="let fuelStop of fuelLog.fuelStops">
-                <span style="font-size: 0.7em;">{{fuelStop.dateAddedUtc | date}}</span>
+                <span class="logged-date">{{fuelStop.dateAddedUtc | dateLogged}}</span>
                 <ion-icon name="car"></ion-icon>
                 <span class="mileage-list">{{ fuelStop.mileage | number }}</span>
                 <ion-icon name="color-fill"></ion-icon>
